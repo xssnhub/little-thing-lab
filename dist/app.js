@@ -354,7 +354,7 @@ function plainSummary(m){
     `符號 ${m.dominantSymbol} 正在跨世代流傳。`,
     `目前約 ${Math.round(m.dominantShare*100)}% 的存活者帶著它。`
   ];
-  if(m.settlements>=2)return[`${m.settlements} 個聚集區正在形成。','牠們正在資源與彼此之間找到暫時的生活中心。'];
+  if(m.settlements>=2)return[`${m.settlements} 個聚集區正在形成。`,'牠們正在資源與彼此之間找到暫時的生活中心。'];
   return['世界正在自己走。','有的覓食，有的結群，有的帶著上一代留下來的記憶。'];
 }
 
