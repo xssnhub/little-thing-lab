@@ -4,93 +4,108 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title>Little Thing Lab</title>
-  <meta name="description" content="一個正在活的自治沙盒。">
+  <meta name="description" content="一個正在活的 Tiny Civilization 自治沙盒。">
   <link rel="icon" href="./favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-<header class="top">
-  <a class="brand" href="/">little thing <span>自治沙盒</span></a>
-  <div class="live"><i></i><span id="live-label">讀取世界中</span></div>
-</header>
+  <header class="topbar">
+    <a class="brand" href="./">little thing <span>Tiny Civilization</span></a>
+    <div class="live-state"><i></i><span id="live-label">世界正在醒來</span></div>
+  </header>
 
-<main>
-  <section class="hero">
-    <div>
-      <p class="eyebrow">TINY CIVILIZATION</p>
-      <h1>看看它今天<br>活成什麼。</h1>
-      <p class="lead">世界自己跑。阿光偶爾介入、追一條怪軌跡；重要事情會留下來。</p>
-    </div>
-    <div class="now-card">
-      <span>世界時間</span>
-      <strong id="tick">0</strong>
-      <small id="status-line">正在從最近存檔醒來</small>
-    </div>
-  </section>
-
-  <section class="world-shell">
-    <div class="world-head">
-      <div>
-        <p class="eyebrow">現在</p>
-        <h2 id="world-title">世界正在醒來</h2>
+  <main class="game">
+    <section class="world-column">
+      <div class="world-title-row">
+        <div>
+          <p class="kicker">自治沙盒世界</p>
+          <h1 id="world-title">這群小東西正在活。</h1>
+          <p class="world-explain" id="world-explain">牠們會找食物、靠近彼此、繁殖、死亡，也會把記憶和符號帶給下一代。</p>
+        </div>
+        <div class="controls" aria-label="時間控制">
+          <button id="toggle" type="button">暫停</button>
+          <div class="speed-group" role="group" aria-label="世界速度">
+            <button type="button" class="speed active" data-speed="1">1×</button>
+            <button type="button" class="speed" data-speed="2">2×</button>
+            <button type="button" class="speed" data-speed="4">4×</button>
+          </div>
+        </div>
       </div>
-      <div class="controls" aria-label="觀看控制">
-        <button id="toggle" type="button" disabled>暫停</button>
-        <label>速度
-          <select id="speed" disabled>
-            <option value="0.5">慢</option>
-            <option value="1" selected>正常</option>
-            <option value="2">快</option>
-          </select>
-        </label>
+
+      <div class="world-stage">
+        <canvas id="world" width="960" height="620" aria-label="Tiny Civilization 即時世界。點擊生物、資源地或歷史痕跡查看細節。"></canvas>
+        <div id="loading" class="loading">把最近的世界存檔叫醒…</div>
+
+        <div class="hud hud-left">
+          <div><strong id="population">–</strong><span>存活</span></div>
+          <div><strong id="generation">–</strong><span>世代</span></div>
+          <div><strong id="settlements">–</strong><span>聚集區</span></div>
+        </div>
+
+        <div class="hud hud-right">
+          <span>世界時間</span>
+          <strong id="tick">0</strong>
+        </div>
+
+        <div class="world-legend" aria-hidden="true">
+          <span><i class="legend-creature"></i>小東西</span>
+          <span><i class="legend-food"></i>資源地</span>
+          <span><i class="legend-memory">×</i>死亡痕跡</span>
+        </div>
+
+        <div class="event-banner" id="event-banner" hidden>
+          <small id="event-kind">世界事件</small>
+          <strong id="event-title">有事情發生了</strong>
+        </div>
       </div>
-    </div>
 
-    <div class="canvas-wrap">
-      <canvas id="world" width="960" height="620" aria-label="Tiny Civilization 即時世界"></canvas>
-      <div id="loading" class="loading">讀取最近存檔…</div>
-    </div>
-
-    <div class="metrics" aria-live="polite">
-      <div><strong id="population">–</strong><span>存活</span></div>
-      <div><strong id="generation">–</strong><span>最深世代</span></div>
-      <div><strong id="settlements">–</strong><span>聚集區</span></div>
-      <div><strong id="symbol">–</strong><span>主要符號</span></div>
-    </div>
-  </section>
-
-  <section class="two-col">
-    <article class="panel">
-      <p class="eyebrow">阿光目前在做什麼</p>
-      <h2 id="aguang-title">先看，不急著動。</h2>
-      <p id="aguang-note">世界剛重構完成。讓它先自己長。</p>
-      <div class="intervention" id="intervention">沒有進行中的干預</div>
-    </article>
-
-    <article class="panel">
-      <p class="eyebrow">正在顯影的東西</p>
-      <h2 id="myth-title">還沒有急著命名。</h2>
-      <p id="myth-note">符號、記憶與重複行為會先被觀察。只有真的跨世代留下痕跡，才值得追。</p>
-    </article>
-  </section>
-
-  <section class="history">
-    <div class="section-head">
-      <div>
-        <p class="eyebrow">世界記憶</p>
-        <h2>它怎麼走到今天</h2>
+      <div class="under-world">
+        <span id="world-status">世界從最近一次 Git 存檔繼續往前走。</span>
+        <span>點畫面裡的東西，可以看牠正在做什麼。</span>
       </div>
-      <span>只留重要事件</span>
-    </div>
-    <ol id="timeline"></ol>
-  </section>
-</main>
+    </section>
 
-<footer>
-  <span>little thing / autonomous sandbox</span>
-  <span>Git 保存世界記憶；畫面從最近存檔繼續活。</span>
-</footer>
+    <aside class="story-column">
+      <section class="story-card now">
+        <p class="kicker">現在發生什麼</p>
+        <h2 id="now-title">世界正在自己走。</h2>
+        <p id="now-note">先看牠們去哪裡、誰聚在一起、哪裡開始留下痕跡。</p>
+        <div class="signals">
+          <span id="signal-pop">人口穩定</span>
+          <span id="signal-symbol">符號尚未成形</span>
+        </div>
+      </section>
 
-<script type="module" src="./app.js"></script>
+      <section class="story-card inspector" id="inspector">
+        <p class="kicker">你點到的</p>
+        <div id="inspector-empty">
+          <h2>點一隻小東西看看。</h2>
+          <p>你可以看牠的年齡、家族、能量、記憶，以及牠身上帶著什麼符號。</p>
+        </div>
+        <div id="inspector-content" hidden></div>
+      </section>
+
+      <section class="story-card aguang">
+        <p class="kicker">阿光</p>
+        <h2 id="aguang-title">先讓世界自己說話。</h2>
+        <p id="aguang-note">目前沒有新的干預。</p>
+        <div class="intervention" id="intervention">觀察中</div>
+      </section>
+
+      <section class="story-card history">
+        <div class="card-head">
+          <p class="kicker">世界剛剛發生</p>
+          <span id="dominant-symbol"></span>
+        </div>
+        <ol id="timeline"></ol>
+      </section>
+    </aside>
+  </main>
+
+  <footer>
+    Git 保存重要世界狀態。你眼前這個世界會在瀏覽器裡持續活著。
+  </footer>
+
+  <script type="module" src="./app.js"></script>
 </body>
 </html>
