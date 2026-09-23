@@ -1,0 +1,91 @@
+{
+  "id": "observe-2026-09-23-a",
+  "finishedAt": "2026-09-23T13:29:12.972Z",
+  "fromTick": 0,
+  "toTick": 900,
+  "ticks": 900,
+  "directive": {
+    "id": "observe-2026-09-23-a",
+    "type": "observe",
+    "ticks": 900,
+    "question": "先不碰它，看看第一批值得追的文明痕跡會從哪裡冒出來。",
+    "note": "不加事件、不調漂亮。只看聚集、記憶、符號與死亡痕跡是否自己形成方向。"
+  },
+  "before": {
+    "population": 64,
+    "generation": 0,
+    "settlements": 0,
+    "dominantSymbol": "∴"
+  },
+  "after": {
+    "population": 29,
+    "generation": 7,
+    "settlements": 0,
+    "dominantSymbol": "∴"
+  },
+  "events": [
+    {
+      "tick": 0,
+      "type": "observer",
+      "title": "阿光選擇不干預",
+      "detail": "不加事件、不調漂亮。只看聚集、記憶、符號與死亡痕跡是否自己形成方向。",
+      "key": "observer:阿光選擇不干預"
+    },
+    {
+      "tick": 90,
+      "type": "settlement",
+      "title": "形成 4 個聚集區",
+      "detail": "先當作空間聚集，不急著命名為城市。",
+      "key": "settlement:形成 4 個聚集區"
+    },
+    {
+      "tick": 180,
+      "type": "settlement",
+      "title": "形成 5 個聚集區",
+      "detail": "先當作空間聚集，不急著命名為城市。",
+      "key": "settlement:形成 5 個聚集區"
+    },
+    {
+      "tick": 450,
+      "type": "pattern",
+      "title": "某個地點反覆留下 ∴",
+      "detail": "同一區域累積 9 個相近標記。先觀察。",
+      "key": "pattern:某個地點反覆留下 ∴"
+    },
+    {
+      "tick": 540,
+      "type": "pattern",
+      "title": "某個地點反覆留下 ◇",
+      "detail": "同一區域累積 8 個相近標記。先觀察。",
+      "key": "pattern:某個地點反覆留下 ◇"
+    },
+    {
+      "tick": 630,
+      "type": "symbol",
+      "title": "符號 ∴ 開始跨世代流傳",
+      "detail": "28% 的存活個體攜帶它。先當作傳播現象。",
+      "key": "symbol:符號 ∴ 開始跨世代流傳"
+    },
+    {
+      "tick": 630,
+      "type": "pattern",
+      "title": "某個地點反覆留下 ⋮",
+      "detail": "同一區域累積 6 個相近標記。先觀察。",
+      "key": "pattern:某個地點反覆留下 ⋮"
+    },
+    {
+      "tick": 720,
+      "type": "pattern",
+      "title": "某個地點反覆留下 ⌁",
+      "detail": "同一區域累積 12 個相近標記。先觀察。",
+      "key": "pattern:某個地點反覆留下 ⌁"
+    },
+    {
+      "tick": 810,
+      "type": "pattern",
+      "title": "某個地點反覆留下 △",
+      "detail": "同一區域累積 7 個相近標記。先觀察。",
+      "key": "pattern:某個地點反覆留下 △"
+    }
+  ]
+}
