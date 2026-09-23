@@ -1,34 +1,96 @@
 <!doctype html>
 <html lang="zh-Hant">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Little Thing｜自主生命培養皿</title>
-  <meta name="description" content="食物集中或分散，如何影響群聚與存活？觀看六次可追溯的生命實驗、世代變化與研究標本。">
-  <meta property="og:title" content="Little Thing｜自主生命培養皿">
-  <meta property="og:description" content="一個問題，六次實驗。觀看食物、群聚與世代的變化。">
-  <meta name="theme-color" content="#071a21">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Little Thing Lab</title>
+  <meta name="description" content="一個正在活的自治沙盒。">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="/style.css">
-  <script type="module" src="/app.js"></script>
 </head>
 <body>
-<header class="top"><a href="#" class="brand">little thing<span>自主生命培養皿</span></a><div class="phase">第 001 批 <span class="divider">/</span> 已收束，等待下一次放行</div></header>
+<header class="top">
+  <a class="brand" href="/">little thing <span>自治沙盒</span></a>
+  <div class="live"><i></i><span id="live-label">讀取世界中</span></div>
+</header>
+
 <main>
-  <section class="intro"><div><p class="eyebrow">EXPERIMENT 001 · 食物與群聚</p><h1>一起生活，<br class="mobile">比較容易活下來嗎？</h1><p class="lead">同樣的生命與補給量，兩種食物分布。看它們如何靠近、分散，留下下一代。</p></div><div class="stamp">50<span>起始個體／每次</span></div></section>
-  <section class="workspace" aria-label="實驗重播">
-    <div class="toolbar"><div class="replay-label"><span class="small-dot"></span> 實驗紀錄重播 <span class="hint">不會啟動新實驗</span></div><fieldset id="seeds"><legend>起始組</legend><label><input type="radio" name="seed" value="17" checked><span>01</span></label><label><input type="radio" name="seed" value="83"><span>02</span></label><label><input type="radio" name="seed" value="211"><span>03</span></label></fieldset></div>
-    <div id="loading" role="status">正在讀取實驗紀錄…</div>
-    <div class="worlds">
-      <article class="world" data-mode="uniform"><div class="world-title"><h2><i class="line cyan"></i>分散的食物</h2><span>相同總補給量</span></div><canvas id="uniform" width="960" height="600" aria-label="食物均勻分布的生命模擬重播"></canvas><div class="metrics" id="uniform-metrics"></div></article>
-      <article class="world" data-mode="patchy"><div class="world-title"><h2><i class="line amber"></i>集中的食物</h2><span>兩處主要食物區</span></div><canvas id="patchy" width="960" height="600" aria-label="食物集中分布的生命模擬重播"></canvas><div class="metrics" id="patchy-metrics"></div></article>
+  <section class="hero">
+    <div>
+      <p class="eyebrow">TINY CIVILIZATION</p>
+      <h1>看看它今天<br>活成什麼。</h1>
+      <p class="lead">世界自己跑。阿光偶爾介入、追一條怪軌跡；重要事情會留下來。</p>
     </div>
-    <div class="transport"><button id="play" disabled aria-label="播放實驗重播">播放</button><button id="restart" disabled>回到開始</button><label class="timeline-label" for="timeline">時間步</label><input id="timeline" type="range" min="0" max="2400" value="0" step="1" disabled aria-label="重播時間步"><output id="time">0 / 2,400</output></div>
-    <div class="legend"><span><i class="food"></i>背景亮度＝食物量</span><span><i class="organism"></i>色彩＝起始血緣</span><span>短線＝移動方向</span><span>邊界相接，可繞回另一側</span></div>
+    <div class="now-card">
+      <span>世界時間</span>
+      <strong id="tick">0</strong>
+      <small id="status-line">正在從最近存檔醒來</small>
+    </div>
   </section>
-  <section class="findings"><div><p class="eyebrow">阿光的觀察</p><h2 id="finding-title">正在整理觀察</h2><p id="finding-body"></p><p class="caveat">這是簡化模型中的三組配對實驗。靠得近不等於合作；結果不能直接推論真實生命。</p></div><div class="chart-wrap"><div class="chart-head"><h3>族群如何變化</h3><div><span class="cyan-text">— 分散</span><span class="amber-text">— 集中</span></div></div><svg id="chart" viewBox="0 0 560 220" role="img" aria-label="所選起始組的族群數隨時間變化"></svg><p class="chart-note">線條是保存的觀測點；中間的動畫位置以插值呈現。</p></div></section>
-  <section class="specimen-section"><div class="section-title"><div><p class="eyebrow">留下的標本</p><h2>三個值得再看的時刻</h2></div><span>取自實驗紀錄，點選可回到現場</span></div><div id="specimens" class="specimens"></div></section>
-  <section class="next"><p class="eyebrow">下一個問題</p><h2>聚在一起，是追食物，還是追同伴？</h2><p>下一批可保持食物分布不變，把群聚傾向歸零，再比較存活與血緣變化。尚未執行。</p></section>
-  <details class="method"><summary>這一批怎麼做的</summary><div><p>每組從 50 個體出發，使用相同起始位置與特徵，比較均勻和集中食物。三個固定隨機種子：17、83、211。每次最多 2,400 時間步，遇到滅絕或族群上限便停止。</p><p>每步補給總量相同；食物單格容量固定，飽和時未存入的補給會流失。個體移動、感知與存活都消耗能量；能量足夠後分裂，子代繼承特徵並小幅變異。沒有預先設定合作、族群分工或成功結局。</p><p>「鄰近比例」指 45 距離單位內有另一個體的比例，受族群密度影響；「血緣」是仍有後代存活的起始個體數。世代記錄最深的繁殖代數，不代表智慧。</p><p>本批只使用原創程式與本次研究設計，未匯入私人生活或創作原檔，也未宣稱已完成物理念原文轉譯。</p><p id="provenance"></p></div></details>
+
+  <section class="world-shell">
+    <div class="world-head">
+      <div>
+        <p class="eyebrow">現在</p>
+        <h2 id="world-title">世界正在醒來</h2>
+      </div>
+      <div class="controls" aria-label="觀看控制">
+        <button id="toggle" type="button" disabled>暫停</button>
+        <label>速度
+          <select id="speed" disabled>
+            <option value="0.5">慢</option>
+            <option value="1" selected>正常</option>
+            <option value="2">快</option>
+          </select>
+        </label>
+      </div>
+    </div>
+
+    <div class="canvas-wrap">
+      <canvas id="world" width="960" height="620" aria-label="Tiny Civilization 即時世界"></canvas>
+      <div id="loading" class="loading">讀取最近存檔…</div>
+    </div>
+
+    <div class="metrics" aria-live="polite">
+      <div><strong id="population">–</strong><span>存活</span></div>
+      <div><strong id="generation">–</strong><span>最深世代</span></div>
+      <div><strong id="settlements">–</strong><span>聚集區</span></div>
+      <div><strong id="symbol">–</strong><span>主要符號</span></div>
+    </div>
+  </section>
+
+  <section class="two-col">
+    <article class="panel">
+      <p class="eyebrow">阿光目前在做什麼</p>
+      <h2 id="aguang-title">先看，不急著動。</h2>
+      <p id="aguang-note">世界剛重構完成。讓它先自己長。</p>
+      <div class="intervention" id="intervention">沒有進行中的干預</div>
+    </article>
+
+    <article class="panel">
+      <p class="eyebrow">正在顯影的東西</p>
+      <h2 id="myth-title">還沒有急著命名。</h2>
+      <p id="myth-note">符號、記憶與重複行為會先被觀察。只有真的跨世代留下痕跡，才值得追。</p>
+    </article>
+  </section>
+
+  <section class="history">
+    <div class="section-head">
+      <div>
+        <p class="eyebrow">世界記憶</p>
+        <h2>它怎麼走到今天</h2>
+      </div>
+      <span>只留重要事件</span>
+    </div>
+    <ol id="timeline"></ol>
+  </section>
 </main>
-<footer><span>little thing / 獨立自治實驗室</span><span>保存、觀察，再問下一個問題。</span></footer>
-</body></html>
+
+<footer>
+  <span>little thing / autonomous sandbox</span>
+  <span>Git 保存世界記憶；畫面從最近存檔繼續活。</span>
+</footer>
+
+<script type="module" src="/app.js"></script>
+</body>
+</html>
