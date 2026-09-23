@@ -119,6 +119,7 @@ canvas{width:100%;height:100%;display:block;cursor:crosshair}
   color:var(--muted);
   z-index:8;
 }
+.loading[hidden]{display:none!important}
 .hud{
   position:absolute;
   top:14px;
