@@ -33,6 +33,11 @@ jobs:
         with:
           ref: main
 
+      - name: Check browser JavaScript
+        run: |
+          node --check dist/app.js
+          node --check dist/world.js
+
       - name: Setup Pages
         uses: actions/configure-pages@v5
         with:
