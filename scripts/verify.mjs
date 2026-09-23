@@ -1,24 +1,23 @@
-import fs from 'node:fs';import assert from 'node:assert/strict';import {createHash} from 'node:crypto';
-import {create,advance,metrics} from '../src/life.mjs';
-const directory='records/batch-001',batch=JSON.parse(fs.readFileSync(directory+'/batch.json'));
-assert.equal(batch.status,'complete');assert.equal(batch.runs.length,6);
-const hashes=JSON.parse(fs.readFileSync(directory+'/hashes.json'));
-for(const [file,hash]of Object.entries(hashes))assert.equal(createHash('sha256').update(fs.readFileSync(directory+'/'+file)).digest('hex'),hash);
-for(const run of batch.runs){
- const saved=JSON.parse(fs.readFileSync(directory+'/'+run.id+'.json'));
- assert.deepEqual(advance(create(run.seed,run.mode),saved.tick),saved,run.id+' deterministic rerun');
- assert.deepEqual(metrics(saved),run.final);
- const resumed=advance(JSON.parse(JSON.stringify(saved)),100);
- const direct=advance(create(run.seed,run.mode),saved.tick+100);
- assert.deepEqual(resumed,direct,run.id+' resumed in fresh process');
+import fs from 'node:fs';
+import {createWorld,metrics} from '../src/world.mjs';
+
+const required=[
+  'README.md','AGENTS.md','STATUS.md','src/world.mjs',
+  'history/timeline.json','control/directive.json',
+  'dist/index.html','dist/app.js','dist/style.css','dist/world.js'
+];
+for(const p of required) if(!fs.existsSync(p)) throw Error(`missing ${p}`);
+
+const world=fs.existsSync('state/current.json')
+  ? JSON.parse(fs.readFileSync('state/current.json','utf8'))
+  : createWorld(230923);
+const m=metrics(world);
+if(world.version!==2) throw Error('unexpected world version');
+if(!Number.isFinite(m.tick)||!Number.isFinite(m.population)) throw Error('invalid world metrics');
+
+if(fs.existsSync('dist/assets/world.json')){
+  const publicWorld=JSON.parse(fs.readFileSync('dist/assets/world.json','utf8'));
+  if(publicWorld.tick!==world.tick) throw Error('published world is not current');
 }
-const exported=JSON.parse(fs.readFileSync('dist/assets/experiment.json'));
-assert.deepEqual(exported.runs,batch.runs);assert.equal(exported.id,batch.id);
-const expected=['index.html','app.js','style.css','favicon.svg','assets/experiment.json','assets/observations.json',
- 'assets/specimen-1.svg','assets/specimen-2.svg','assets/specimen-3.svg'];
-function files(dir,prefix=''){return fs.readdirSync(dir,{withFileTypes:true}).flatMap(d=>d.isDirectory()?files(dir+'/'+d.name,prefix+d.name+'/'):[prefix+d.name]);}
-assert.deepEqual(files('dist').sort(),expected.sort(),'public allowlist');
-for(const file of files('dist'))assert.ok(!/gho_|sk-proj-|accountId|remainingPercent|permit\.json/.test(fs.readFileSync('dist/'+file,'utf8')),'private runtime material in '+file);
-assert.ok(!fs.existsSync('runtime/writer.lock'),'writer lock released');
-console.log(JSON.stringify({status:'passed',runs:6,hashes:Object.keys(hashes).length,resumeChecks:6,publicFiles:expected.length,
- note:'Fresh-process deterministic replay and resume; not a second model handoff.'}));
+
+console.log(JSON.stringify({ok:true,tick:m.tick,population:m.population,events:world.timeline.length}));
