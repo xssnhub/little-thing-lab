@@ -230,7 +230,7 @@ function drawTrails(){
     const t=trails.get(a.id);
     if(!t||t.length<2)continue;
     const strong=selected?.type==='agent'&&selected.id===a.id;
-    ctx.strokeStyle=rgba(colorForSymbol(a.symbol),strong?.55:.11);
+    ctx.strokeStyle=rgba(colorForSymbol(a.symbol),strong ? .55 : .11);
     ctx.lineWidth=strong?2.2:1;
     ctx.beginPath();
     ctx.moveTo(t[0].x,t[0].y);
