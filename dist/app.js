@@ -171,12 +171,12 @@ async function poll(now){
   lastPoll=now;
   try{
     const [directive,summary]=await Promise.all([
-      fetchJSON('/assets/directive.json'),
-      fetchJSON('/assets/summary.json').catch(()=>null)
+      fetchJSON('./assets/directive.json'),
+      fetchJSON('./assets/summary.json').catch(()=>null)
     ]);
 
     if(summary?.latestRun&&activeRun?.id===summary.latestRun){
-      const latestSaved=await fetchJSON('/assets/world.json');
+      const latestSaved=await fetchJSON('./assets/world.json');
       savedWorld=latestSaved;
     }
 
@@ -222,9 +222,9 @@ let previous=null;
 let latestRun=null;
 try{
   const values=await Promise.all([
-    fetchJSON('/assets/world.json').catch(()=>createWorld(230923)),
-    fetchJSON('/assets/previous-world.json').catch(()=>null),
-    fetchJSON('/assets/latest-run.json').catch(()=>null)
+    fetchJSON('./assets/world.json').catch(()=>createWorld(230923)),
+    fetchJSON('./assets/previous-world.json').catch(()=>null),
+    fetchJSON('./assets/latest-run.json').catch(()=>null)
   ]);
   savedWorld=values[0];
   previous=values[1];
