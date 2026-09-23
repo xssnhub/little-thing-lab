@@ -26,6 +26,9 @@ jobs:
         with:
           node-version: 20
 
+      - name: Sync browser engine
+        run: cp src/world.mjs dist/world.js
+
       - name: Verify engine
         run: npm test
 
@@ -39,7 +42,7 @@ jobs:
         run: |
           git config user.name "little-thing-lab"
           git config user.email "little-thing-lab@users.noreply.github.com"
-          git add state history dist/assets
+          git add state history dist/assets dist/world.js
           if git diff --cached --quiet; then
             echo "No world changes to save."
             exit 0
