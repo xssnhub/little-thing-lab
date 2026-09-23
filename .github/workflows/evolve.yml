@@ -1,0 +1,48 @@
+name: Evolve sandbox world
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "control/directive.json"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: little-thing-world
+  cancel-in-progress: false
+
+jobs:
+  evolve:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Verify engine
+        run: npm test
+
+      - name: Evolve world
+        run: npm run evolve
+
+      - name: Verify saved world
+        run: npm run verify
+
+      - name: Save world memory
+        run: |
+          git config user.name "little-thing-lab"
+          git config user.email "little-thing-lab@users.noreply.github.com"
+          git add state history dist/assets
+          if git diff --cached --quiet; then
+            echo "No world changes to save."
+            exit 0
+          fi
+          git commit -m "world: evolve from latest directive"
+          git push
