@@ -37,11 +37,7 @@ const run={
   fromTick,
   toTick:world.tick,
   ticks:world.tick-fromTick,
-  directive:{
-    type:directive?.type ?? 'observe',
-    note:directive?.note ?? '',
-    question:directive?.question ?? ''
-  },
+  directive:clone(directive ?? {type:'observe'}),
   before:{
     population:before.population,
     generation:before.maxGeneration,
